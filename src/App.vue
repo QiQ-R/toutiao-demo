@@ -24,4 +24,7 @@ export default {
   height: 200px;
   background-color: pink;
 }
+h1{
+  font-size:75px
+}
 </style>

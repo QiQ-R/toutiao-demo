@@ -1,7 +1,11 @@
 module.exports = {
   plugins: {
-    'postcss-px-to-viewport': {
-      viewportWidth: 375,
-    },
-  },
-};
+
+    'postcss-pxtorem': {
+      rootValue({ file }) { // 解构了obj.file
+        return file.includes('vant')  ? 37.5 : 75
+      },
+      propList: ['*']
+    }
+  }
+}
