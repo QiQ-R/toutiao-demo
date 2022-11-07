@@ -1,5 +1,7 @@
+import axios from "axios"
 
-import axios from 'axios'
-const instance = axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/'
+const request = axios.create({
+  baseURL: "http://toutiao.itheima.net/v1_0" // 基础路径
+})
 
-export default instance
+export default request
