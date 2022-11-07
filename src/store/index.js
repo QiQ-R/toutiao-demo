@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {setLocal, getLocal} from '@/utils/storage.js'
+
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   // 状态 数据
   state: {
-    token: JSON.parse(localStorage.getItem('token')) || ''
+    token: getLocal('token') || ''
   },
   getters: {
   },
@@ -14,7 +16,7 @@ export default new Vuex.Store({
   mutations: {
     setToken(state, token) {
       state.token = token
-      localStorage.setItem('token', JSON.stringify(token))
+      setLocal('token',token)
     }
   },
   actions: {
