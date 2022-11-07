@@ -26,14 +26,21 @@
             round
             native-type="button"
             @click="sendBtn"
-            v-if="!flag">
+            v-if="!flag"
+          >
             发送验证码
-            </van-button>
-            <van-count-down :time="time" format="ss" v-else  @finish="flag=false"/>
+          </van-button>
+          <van-count-down
+            :time="time"
+            format="ss"
+            v-else
+            @finish="flag = false"
+          />
         </template>
       </van-field>
       <div style="margin: 16px">
-        <van-button block type="info" native-type="submit" class="login-btn">提交</van-button
+        <van-button block type="info" native-type="submit" class="login-btn"
+          >提交</van-button
         >
       </div>
     </van-form>
@@ -41,7 +48,7 @@
 </template>
 
 <script>
-import { loginApi } from "@/api/User.js";
+import { loginApi, sendAPI } from "@/api/User.js";
 export default {
   data() {
     return {
@@ -71,8 +78,8 @@ export default {
           },
         ],
       },
-      time:5000,
-      flag:false
+      time: 60000,
+      flag: false,
     };
   },
   methods: {
@@ -100,15 +107,21 @@ export default {
       // 验证手机号是否正确
       try {
         await this.$refs.sendcode.validate("mobile");
-        this.flag=true // 验证码倒计时
+        
       } catch (err) {
-        this.$toast.fail({
+       return this.$toast.fail({
           message: "验证失败",
           duration: 2000,
         });
+      } 
+      this.flag = true; // 验证码倒计时
+      //发送验证码
+      try{
+       await sendAPI(this.user.mobile)
+      }catch(err){
+        
+        this.$toast.fail('获取验证码失败')
       }
-      
-     
     },
   },
 };
