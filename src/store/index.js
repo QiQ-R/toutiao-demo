@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // 状态 数据
   state: {
-    token: getLocal('token') || ''
+    token: getLocal('token') 
   },
   getters: {
   },
