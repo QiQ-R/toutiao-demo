@@ -90,12 +90,12 @@ export default {
         duration: 0,
       });
       try {
-        const res = await loginApi(this.user);
+        const {data:{data}} = await loginApi(this.user);
         this.$toast.success({
           message: "登录成功",
-
           duration: 2000,
         });
+        this.$store.commit('setToken',data)
       } catch (err) {
         this.$toast.fail({
           message: "登录失败",
