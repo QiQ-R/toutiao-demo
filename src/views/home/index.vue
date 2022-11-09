@@ -17,7 +17,7 @@
     <!-- 频道列表 -->
     <van-tabs animated swipeable v-model="active" class="channel-tabs">
       <van-tab :title="index.name" v-for="index in channels" :key="index.id">
-        {{ index.name }}
+        <channel-list :channels="index" />
       </van-tab>
       <div class="placeholder" slot="nav-right"></div>
       <div class="gengduo" slot="nav-right">
@@ -29,6 +29,7 @@
 
 <script>
 import { userChannelAPI } from "@/api/User.js";
+import channelList from "./components/channels-list.vue";
 export default {
   data() {
     return {
@@ -47,6 +48,9 @@ export default {
       console.log(data.channels);
       this.channels = data.channels;
     },
+  },
+  components: {
+    channelList,
   },
 };
 </script>
