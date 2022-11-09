@@ -1,6 +1,12 @@
 <template>
   <div>
-    <van-nav-bar title="登录" class="login" />
+    <van-nav-bar
+      title="登录"
+      class="login"
+      left-arrow
+      @click-left="$router.go(-1)"
+    >
+    </van-nav-bar>
     <van-form class="login-container" @submit="loginSub" ref="sendcode">
       <van-field
         name="mobile"
@@ -90,12 +96,14 @@ export default {
         duration: 0,
       });
       try {
-        const {data:{data}} = await loginApi(this.user);
+        const {
+          data: { data },
+        } = await loginApi(this.user);
         this.$toast.success({
           message: "登录成功",
           duration: 2000,
         });
-        this.$store.commit('setToken',data)
+        this.$store.commit("setToken", data);
       } catch (err) {
         this.$toast.fail({
           message: "登录失败",
@@ -107,20 +115,18 @@ export default {
       // 验证手机号是否正确
       try {
         await this.$refs.sendcode.validate("mobile");
-        
       } catch (err) {
-       return this.$toast.fail({
+        return this.$toast.fail({
           message: "验证失败",
           duration: 2000,
         });
-      } 
+      }
       this.flag = true; // 验证码倒计时
       //发送验证码
-      try{
-       await sendAPI(this.user.mobile)
-      }catch(err){
-        
-        this.$toast.fail('获取验证码失败')
+      try {
+        await sendAPI(this.user.mobile);
+      } catch (err) {
+        this.$toast.fail("获取验证码失败");
       }
     },
   },
@@ -144,5 +150,9 @@ export default {
   .login-btn {
     background-color: #6db4fb;
   }
+}
+
+.van-icon-arrow-left::before {
+  color: #fff !important;
 }
 </style>
