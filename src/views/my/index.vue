@@ -20,13 +20,8 @@
         <!-- 基本信息 -->
         <div class="base">
           <div class="left">
-            <van-image
-              fit="cover"
-              src="https://img.yzcdn.cn/vant/cat.jpeg"
-              class="avatar"
-              round
-            />
-            <span class="name">黑马头条</span>
+            <van-image fit="cover" :src="userInfo.photo" class="avatar" round />
+            <span class="name">{{ userInfo.name }}</span>
           </div>
           <div class="right">
             <van-button type="default" size="mini" round>编辑资料</van-button>
@@ -35,19 +30,19 @@
         <!-- 粉丝、关注 -->
         <div class="data">
           <div class="data-item">
-            <span>90</span>
+            <span>{{ userInfo.art_count }}</span>
             <span>头条</span>
           </div>
           <div class="data-item">
-            <span>90</span>
+            <span>{{ userInfo.follow_count }}</span>
             <span>关注</span>
           </div>
           <div class="data-item">
-            <span>90</span>
+            <span>{{ userInfo.fans_count }}</span>
             <span>粉丝</span>
           </div>
           <div class="data-item">
-            <span>90</span>
+            <span>{{ userInfo.like_count }}</span>
             <span>获赞</span>
           </div>
         </div>
@@ -79,9 +74,18 @@
 
 <script>
 import { mapState } from "vuex";
+import { userInfoAPI } from "@/api/User.js";
 export default {
+  data() {
+    return {
+      userInfo: {},
+    };
+  },
   computed: {
     ...mapState(["token"]),
+  },
+  created() {
+    this.userInfoFn();
   },
   methods: {
     onLogout() {
@@ -96,6 +100,17 @@ export default {
         .catch(() => {
           this.$toast("取消成功");
         });
+    },
+    async userInfoFn() {
+      try {
+        const {
+          data: { data },
+        } = await userInfoAPI();
+        console.log(data);
+        this.userInfo = data;
+      } catch (err) {
+        $this.$toast('获取失败')
+      }
     },
   },
 };
