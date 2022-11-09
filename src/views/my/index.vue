@@ -1,7 +1,7 @@
 <template>
   <div class="my-container">
     <!-- 未登录 -->
-    <div class="not-login">
+    <div class="not-login" v-if="!token.token">
       <div class="header">
         <img
           class="mobile-img"
@@ -10,15 +10,12 @@
         />
       </div>
       <div class="grid-nav"></div>
-      <van-cell title="消息通知" is-link url="" />
-      <van-cell title="实名认证" is-link url="" />
-      <van-cell title="用户反馈" is-link url="" />
-      <van-cell title="小智同学" is-link url="" />
-      <van-cell title="系统设置" is-link url="" />
+      <van-cell title="消息通知" is-link />
+      <van-cell title="小智同学" is-link />
     </div>
 
     <!-- 已登录 -->
-    <div class="login">
+    <div class="login" v-else>
       <div class="userInfo header">
         <!-- 基本信息 -->
         <div class="base">
@@ -57,35 +54,56 @@
       </div>
 
       <van-grid :column-num="2">
-        <van-grid-item  text="收藏" >
+        <van-grid-item text="收藏">
           <template #icon>
             <i class="iconfont icon-shoucang"></i>
           </template>
         </van-grid-item>
 
-        <van-grid-item text="历史" >
+        <van-grid-item text="历史">
           <template #icon>
             <i class="iconfont icon-lishi"></i>
           </template>
-          
         </van-grid-item>
       </van-grid>
 
-      <van-cell title="消息通知" is-link />
-<van-cell title="小智同学" is-link />
-<van-cell class="logout-cell" title="退出登录" center/>
+      <van-cell title="消息通知" is-link url="" />
+      <van-cell title="实名认证" is-link url="" />
+      <van-cell title="用户反馈" is-link url="" />
+      <van-cell title="小智同学" is-link url="" />
+      <van-cell title="系统设置" is-link url="" />
+      <van-cell @click="onLogout" class="logout-cell" title="退出登录" center />
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  computed: {
+    ...mapState(["token"]),
+  },
+  methods: {
+    onLogout() {
+      this.$dialog
+        .confirm({
+          title: "退出",
+          message: "确认退出吗",
+        })
+        .then(() => {
+          this.$store.commit("setToken", {});
+        })
+        .catch(() => {
+          this.$toast("取消成功");
+        });
+    },
+  },
+};
 </script>
 
 <style lang="less">
-
 .my-container {
-  margin-bottom:120px ;
+  margin-bottom: 120px;
   .not-login {
     .header {
       height: 361px;
@@ -151,9 +169,12 @@ export default {};
         }
       }
     }
-    .iconfont{
-      font-size:45px ;
+    .iconfont {
+      font-size: 45px;
       color: #eb5253;
+    }
+    .logout-cell {
+      text-align: center;
     }
   }
 }

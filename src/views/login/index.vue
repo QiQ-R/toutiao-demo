@@ -104,6 +104,7 @@ export default {
           duration: 2000,
         });
         this.$store.commit("setToken", data);
+        this.$router.go(-1)
       } catch (err) {
         this.$toast.fail({
           message: "登录失败",

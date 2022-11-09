@@ -30,19 +30,23 @@
         <template #icon>
           <i class="iconfont icon-wode"></i>
         </template>
-        <span>我的</span>
+        <span>{{ token.token ? "我的" :  "未登录"}}</span>
       </van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  computed: {
+    ...mapState(["token"]),
+  },
+};
 </script>
 
 <style lang="less">
 .layout-container {
-  
   i {
     font-size: 40px;
   }
