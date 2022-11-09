@@ -10,9 +10,9 @@ export const loginApi = function (data) {
 }
 export const sendAPI = function (data) {
   return request({
-    url: '/sms/codes/'+data,
+    url: '/sms/codes/' + data,
     method: 'GET',
-    
+
   })
 }
 export const userInfoAPI = function () {
@@ -23,6 +23,17 @@ export const userInfoAPI = function () {
     // headers: {
     //   Authorization: `Bearer ${store.state.token.token} `
     // }
-    
+
   })
 }
+
+// 获取用户 频道列表
+export const userChannelAPI = function () {
+  return request({
+    url: '/user/channels',
+    method: 'GET',
+
+
+  })
+}
+
