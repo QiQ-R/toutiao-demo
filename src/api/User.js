@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import store from '@/store'
+//    
 
 export const loginApi = function (data) {
   return request({
@@ -19,10 +19,10 @@ export const userInfoAPI = function () {
   return request({
     url: '/user',
     method: 'GET',
-    //请求头：
-    headers: {
-      Authorization: `Bearer ${store.state.token.token} `
-    }
+    //请求头： 在拦截器中请求
+    // headers: {
+    //   Authorization: `Bearer ${store.state.token.token} `
+    // }
     
   })
 }

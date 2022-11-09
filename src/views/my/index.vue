@@ -109,7 +109,7 @@ export default {
         console.log(data);
         this.userInfo = data;
       } catch (err) {
-        $this.$toast('获取失败')
+        $this.$toast("获取失败");
       }
     },
   },
