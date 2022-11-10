@@ -14,13 +14,14 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <van-cell v-for="item in list" :key="item.id" :title="item.title" />
+        <channel-item v-for="item in list" :key="item.id" :item="item" />
       </van-list>
     </van-pull-refresh>
   </div>
 </template>
 
 <script>
+import channelItem from "@/components/channels-item/index.vue";
 import { getArticles } from "@/api/channels.js";
 export default {
   name: "test-item",
@@ -35,6 +36,9 @@ export default {
       refreshingLoading: false, // 下拉刷新的状态
       successText: "刷新成功",
     };
+  },
+  components: {
+    channelItem,
   },
 
   methods: {
@@ -88,6 +92,7 @@ export default {
 
 <style lang="less">
 .channel-list {
+  padding-top: 180px;
   padding-bottom: 88px;
   height: 79vh;
   overflow-y: auto;
