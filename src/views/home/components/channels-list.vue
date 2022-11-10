@@ -14,7 +14,7 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <channel-item v-for="item in list" :key="item.id" :item="item" />
+        <channel-item v-for="item in list" :key="item.id" :article="item" />
       </van-list>
     </van-pull-refresh>
   </div>
