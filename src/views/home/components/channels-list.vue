@@ -3,6 +3,8 @@
     <van-list
       v-model="loading"
       :finished="finished"
+      :error.sync="error"
+      error-text="请求失败，点击重新加载"
       finished-text="没有更多了"
       @load="onLoad"
     >
@@ -21,24 +23,37 @@ export default {
       list: [],
       loading: false,
       finished: false,
+      timestamp: "",
+      error: false,
     };
   },
 
   methods: {
     async onLoad() {
       // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      const {
-        data: {
-          data: { results, pre_timestamp },
-        },
-      } = await getArticles({
-        channel_id: this.channels.id,
-        timestamp: Date.now(),
-      });
-      console.log(results, pre_timestamp);
-      this.list = [...this.list, ...results];
-      this.loading = false;
+      try {
+        const {
+          data: {
+            data: { results, pre_timestamp },
+          },
+        } = await getArticles({
+          channel_id: this.channels.id,
+          timestamp: this.timestamp || Date.now(),
+        });
+        this.list = [...this.list, ...results];
+
+        this.loading = false;
+        if (results.length) {
+          this.timestamp = pre_timestamp;
+        } else {
+          this.finished = true;
+        }
+      } catch (err) {
+        console.log("请求失败", err);
+
+        this.loading = false;
+        this.error = true;
+      }
     },
   },
 };
