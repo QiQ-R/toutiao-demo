@@ -1,15 +1,22 @@
 <template>
   <div class="channel-list">
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      :error.sync="error"
-      error-text="请求失败，点击重新加载"
-      finished-text="没有更多了"
-      @load="onLoad"
+    <van-pull-refresh
+      v-model="refreshingLoading"
+      @refresh="onRefresh"
+      :success-text="successText"
+      success-duration="1500"
     >
-      <van-cell v-for="item in list" :key="item.id" :title="item.title" />
-    </van-list>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        :error.sync="error"
+        error-text="请求失败，点击重新加载"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <van-cell v-for="item in list" :key="item.id" :title="item.title" />
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -25,6 +32,8 @@ export default {
       finished: false,
       timestamp: "",
       error: false,
+      refreshingLoading: false, // 下拉刷新的状态
+      successText: "刷新成功",
     };
   },
 
@@ -55,6 +64,24 @@ export default {
         this.error = true;
       }
     },
+    // 下拉刷新
+    async onRefresh() {
+      try {
+        const {
+          data: {
+            data: { results },
+          },
+        } = await getArticles({
+          channel_id: this.channels.id,
+          timestamp: Date.now(),
+        });
+        this.list = [...this.list, ...results];
+        this.refreshingLoading = false;
+        this.successText = `刷新成功，请求了 ${results.length}条数据`;
+      } catch (err) {
+        this.successText = "刷新失败";
+      }
+    },
   },
 };
 </script>
@@ -62,5 +89,7 @@ export default {
 <style lang="less">
 .channel-list {
   padding-bottom: 88px;
+  height: 79vh;
+  overflow-y: auto;
 }
 </style>

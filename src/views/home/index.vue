@@ -60,6 +60,10 @@ export default {
   /deep/.van-nav-bar__title {
     max-width: unset;
   }
+  .van-nav-bar {
+    position: fixed;
+    width: 100%;
+  }
   .search-btn {
     width: 555px;
     height: 64px;
@@ -82,6 +86,10 @@ export default {
     }
     .van-tabs__wrap {
       border-bottom: 1px solid #edeff3;
+      position: fixed;
+      z-index: 2;
+      margin-top: 92px;
+      width: 100%;
     }
     .van-tab--active .van-tab__text {
       color: #333 !important;
