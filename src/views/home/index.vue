@@ -20,10 +20,20 @@
         <channel-list :channels="index" />
       </van-tab>
       <div class="placeholder" slot="nav-right"></div>
-      <div class="gengduo" slot="nav-right">
+      <div class="gengduo" slot="nav-right" @click="EditShowFn">
         <i class="iconfont icon-gengduo"></i>
       </div>
     </van-tabs>
+
+    <!-- 频道编辑弹出层 -->
+    <van-popup
+      v-model="EditShow"
+      closeable
+      close-icon="close"
+      position="bottom"
+      :style="{ height: '100%' }"
+      close-icon-position="left"
+    />
   </div>
 </template>
 
@@ -35,6 +45,7 @@ export default {
     return {
       active: 0,
       channels: [],
+      EditShow: false,
     };
   },
   created() {
@@ -47,6 +58,10 @@ export default {
       } = await userChannelAPI();
       console.log(data.channels);
       this.channels = data.channels;
+    },
+
+    EditShowFn() {
+      this.EditShow = true;
     },
   },
   components: {
