@@ -29,15 +29,17 @@
     <van-popup
       v-model="EditShow"
       closeable
-      close-icon="close"
       position="bottom"
       :style="{ height: '100%' }"
       close-icon-position="left"
-    />
+    >
+      <channel-edit></channel-edit>
+    </van-popup>
   </div>
 </template>
 
 <script>
+import channelEdit from "./components/channel-edit.vue";
 import { userChannelAPI } from "@/api/User.js";
 import channelList from "./components/channels-list.vue";
 export default {
@@ -45,7 +47,7 @@ export default {
     return {
       active: 0,
       channels: [],
-      EditShow: false,
+      EditShow: true,
     };
   },
   created() {
@@ -66,12 +68,17 @@ export default {
   },
   components: {
     channelList,
+    channelEdit,
   },
 };
 </script>
 
 <style scoped lang="less">
 .home-container {
+  /deep/ .van-icon-cross {
+    top: 10px;
+    left: 10px;
+  }
   /deep/.van-nav-bar__title {
     max-width: unset;
   }
