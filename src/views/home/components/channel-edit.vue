@@ -6,9 +6,9 @@
     <van-grid :gutter="10" class="my-grid">
       <van-grid-item
         class="channel-item"
-        v-for="value in 8"
-        :key="value"
-        text="文字"
+        v-for="(value, index) in channels"
+        :key="index"
+        :text="value.name"
         icon="clear"
       />
     </van-grid>
@@ -28,17 +28,7 @@
 
 <script>
 export default {
-  name: "ChannelEdit",
-  components: {},
-  props: {},
-  data() {
-    return {};
-  },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {},
+  props: ["channels"],
 };
 </script>
 
