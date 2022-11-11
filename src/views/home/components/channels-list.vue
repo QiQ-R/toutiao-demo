@@ -22,7 +22,7 @@
 
 <script>
 import channelItem from "@/components/channels-item/index.vue";
-import { getArticles } from "@/api/channels.js";
+import { getArticles } from "@/api/Articles.js";
 export default {
   name: "test-item",
   props: ["channels"],

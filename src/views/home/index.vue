@@ -33,7 +33,7 @@
       :style="{ height: '100%' }"
       close-icon-position="left"
     >
-      <channel-edit :channels="channels"></channel-edit>
+      <channel-edit :channels="channels" :active="active"></channel-edit>
     </van-popup>
   </div>
 </template>

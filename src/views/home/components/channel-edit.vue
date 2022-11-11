@@ -8,27 +8,69 @@
         class="channel-item"
         v-for="(value, index) in channels"
         :key="index"
-        :text="value.name"
         icon="clear"
-      />
+      >
+        <template v-slot:text class="text">
+          <span :class="{ active: index === active }">
+            {{ value.name }}
+          </span>
+        </template>
+      </van-grid-item>
     </van-grid>
 
     <van-cell title="频道推荐" :border="false"></van-cell>
     <van-grid :gutter="10" class="recommend-grid">
       <van-grid-item
         class="channel-item"
-        v-for="value in 8"
+        v-for="value in recommendChannels"
         icon="plus"
-        :key="value"
-        text="文字"
+        :key="value.id"
+        :text="value.name"
+        @click="AddChannel(value)"
       />
     </van-grid>
   </div>
 </template>
 
 <script>
+import { getAllChannels } from "@/api/channels.js";
 export default {
-  props: ["channels"],
+  data() {
+    return {
+      allChannels: [],
+    };
+  },
+  props: ["channels", "active"],
+  created() {
+    this.getAllChannelsFn();
+  },
+  methods: {
+    async getAllChannelsFn() {
+      try {
+        const {
+          data: {
+            data: { channels },
+          },
+        } = await getAllChannels();
+        this.allChannels = channels;
+        console.log(channels);
+      } catch (err) {
+        console.log("获取数据错误");
+      }
+    },
+    AddChannel(channel) {
+      this.channels.push(channel);
+    },
+  },
+  computed: {
+    recommendChannels() {
+      return this.allChannels.filter((item) => {
+        return !this.channels.some((item2) => {
+          return item2.id === item.id;
+        });
+      });
+    },
+  },
 };
 </script>
 
@@ -46,9 +88,13 @@ export default {
     }
     /deep/ .van-grid-item__content {
       background-color: #f5f5f6;
-      .van-grid-item__text {
+      .active {
+        color: red;
+      }
+      .van-grid-item__text,
+      span {
         color: #222;
-        font-size: 28px;
+        font-size: 22px;
       }
     }
   }
@@ -61,7 +107,7 @@ export default {
       }
 
       .van-grid-item__text {
-        font-size: 28px;
+        font-size: 22px;
         margin-top: 0;
       }
     }

@@ -1,9 +1,9 @@
 import request from "@/utils/request";
 
-export const getArticles = params => {
+//获取全部频道的接口
+export const getAllChannels = () => {
   return request({
-    url: '/articles',
+    url: '/channels',
     method: 'GET',
-    params
   })
 }
