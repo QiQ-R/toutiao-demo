@@ -37,3 +37,13 @@ export const userChannelAPI = function () {
   })
 }
 
+export const AddUserChannels = (channels) => {
+  return request({
+    url: '/user/channels',
+    method: 'PATCH',
+    data: {
+      channels: [channels]
+    }
+  })
+}
+

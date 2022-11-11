@@ -33,7 +33,12 @@
       :style="{ height: '100%' }"
       close-icon-position="left"
     >
-      <channel-edit :channels="channels" :active="active"></channel-edit>
+      <channel-edit
+        :channels="channels"
+        :active="active"
+        @update-active="OnUpdateActive"
+      ></channel-edit>
+      <!-- @update-active="OnUpdateActive"   接受子组件传值  -->
     </van-popup>
   </div>
 </template>
@@ -64,6 +69,11 @@ export default {
 
     EditShowFn() {
       this.EditShow = true;
+    },
+    // 编辑频道页面点击 我的频道 跳转
+    OnUpdateActive(index, isEditShow) {
+      this.active = index;
+      this.EditShow = isEditShow;
     },
   },
   components: {
