@@ -57,7 +57,7 @@
 import { getAllChannels } from "@/api/channels.js";
 import { mapState } from "vuex";
 import { setLocal } from "@/utils/storage.js";
-import { AddUserChannels } from "@/api/User.js";
+import { AddUserChannels, delUserChannels } from "@/api/User.js";
 export default {
   data() {
     return {
@@ -118,9 +118,22 @@ export default {
           this.$emit("update-active", this.active - 1, true);
         }
         this.channels.splice(index, 1);
+        this.delChannel(channels);
       } else {
         // 非编辑状态
         this.$emit("update-active", index, false); //  给父组件传值 名为 update-active 父组件使用@update-active 接收
+      }
+    },
+    //删除用户频道
+    async delChannel(channels) {
+      if (this.token.token) {
+        // 用户登录后
+        const res = await delUserChannels(channels.id);
+        console.log(res);
+      } else {
+        // 未登录
+        console.log(111);
+        setLocal("channels", this.channels);
       }
     },
   },

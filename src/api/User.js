@@ -36,7 +36,7 @@ export const userChannelAPI = function () {
 
   })
 }
-
+// 添加用户频道列表
 export const AddUserChannels = (channels) => {
   return request({
     url: '/user/channels',
@@ -46,4 +46,11 @@ export const AddUserChannels = (channels) => {
     }
   })
 }
+// 删除用户频道列表
 
+export const delUserChannels = (target) => {
+  return request({
+    url: '/user/channels/' + target,
+    method: 'DELETE',
+  })
+}
