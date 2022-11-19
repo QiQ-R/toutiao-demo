@@ -14,7 +14,12 @@ const routes = [
     path: "/",
     redirect: '/home'
   },
-  
+  {
+    path: "/search",
+    component: () => import('@/views/search/index')
+  },
+
+
   {
     path: '/',
     component: () => import('@/views/layout/index'),

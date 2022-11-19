@@ -9,6 +9,7 @@
           size="small"
           round
           icon="search"
+          to="search"
           >搜索</van-button
         >
       </template>
@@ -47,24 +48,37 @@
 import channelEdit from "./components/channel-edit.vue";
 import { userChannelAPI } from "@/api/User.js";
 import channelList from "./components/channels-list.vue";
+import { mapState } from "vuex";
+import { getLocal } from "@/utils/storage.js";
 export default {
   data() {
     return {
       active: 0,
       channels: [],
-      EditShow: true,
+      EditShow: false,
     };
+  },
+  computed: {
+    ...mapState(["token"]),
   },
   created() {
     this.userChannelFn();
   },
   methods: {
     async userChannelFn() {
-      const {
-        data: { data },
-      } = await userChannelAPI();
-      console.log(data.channels);
-      this.channels = data.channels;
+      let channels = [];
+      // 1、登录 或者没有本地存储
+      let local = getLocal("channels");
+      if (this.token.token || !local.length) {
+        const {
+          data: { data },
+        } = await userChannelAPI();
+
+        channels = data.channels;
+      } else {
+        channels = local;
+      }
+      this.channels = channels;
     },
 
     EditShowFn() {
