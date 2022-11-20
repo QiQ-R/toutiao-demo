@@ -34,7 +34,6 @@ export default {
       deep: true,
       immediate: true,
       handler: debounce(function (newValue) {
-        console.log(newValue)
         this.getSuggestionFn(newValue)
       }, 1000)
     }

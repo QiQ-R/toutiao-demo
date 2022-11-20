@@ -21,7 +21,12 @@
       <!-- 联想建议 -->
       <search-suggest v-else-if="value" :searchText="value" @search="onSearch"></search-suggest>
       <!-- 搜索历史 -->
-      <search-history v-else :SearchHistory="SearchHistory"></search-history>
+      <search-history
+        v-else
+        :SearchHistory="SearchHistory"
+        @search="onSearch"
+        @clear-all="SearchHistory = []"
+      ></search-history>
     </div>
   </div>
 </template>
@@ -30,13 +35,14 @@
 import SearchSuggest from './commponents/search-suggest.vue'
 import SearchHistory from './commponents/search-history.vue'
 import SearchResult from './commponents/search-result.vue'
+import { setLocal, getLocal } from '@/utils/storage.js'
 export default {
   data () {
     return {
       name: 'search',
       value: '',
       isResult: false,
-      SearchHistory: []
+      SearchHistory: getLocal('historyList')[0] ? getLocal('historyList') : []
     }
   },
   components: {
@@ -48,12 +54,11 @@ export default {
     onSearch (val) {
       this.value = val
       const index = this.SearchHistory.indexOf(val)
+
       if (index !== -1) {
-        this.SearchHistory.splice(index, -1)
+        this.SearchHistory.splice(index, 1)
       }
       this.SearchHistory.unshift(val)
-
-      console.log(this.SearchHistory)
 
       this.isResult = true
     },
@@ -66,6 +71,11 @@ export default {
       this.isResult = false
     }
 
+  },
+  watch: {
+    SearchHistory (newVal) {
+      setLocal('historyList', newVal)
+    }
   }
 }
 </script>

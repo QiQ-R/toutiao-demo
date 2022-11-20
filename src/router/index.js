@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -11,14 +10,13 @@ const routes = [
     component: () => import('@/views/login/index')
   },
   {
-    path: "/",
+    path: '/',
     redirect: '/home'
   },
   {
-    path: "/search",
+    path: '/search',
     component: () => import('@/views/search/index')
   },
-
 
   {
     path: '/',

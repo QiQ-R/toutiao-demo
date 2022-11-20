@@ -32,7 +32,7 @@ export default {
           per_page: this.per_page,
           q: this.searchTest
         })
-        console.log(results, total_count)
+
         this.loading = false
         this.page += 1
         this.list = [...this.list, ...results]
