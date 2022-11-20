@@ -10,6 +10,7 @@
         placeholder="请输入搜索关键词"
         @search="onSearch"
         @cancel="onCancel"
+        @blur="blur"
         background="#3296fa"
       />
     </form>
@@ -20,7 +21,7 @@
       <!-- 联想建议 -->
       <search-suggest v-else-if="value" :searchText="value" @search="onSearch"></search-suggest>
       <!-- 搜索历史 -->
-      <search-history v-else></search-history>
+      <search-history v-else :SearchHistory="SearchHistory"></search-history>
     </div>
   </div>
 </template>
@@ -46,14 +47,25 @@ export default {
   methods: {
     onSearch (val) {
       this.value = val
-      console.log(val)
+      const index = this.SearchHistory.indexOf(val)
+      if (index !== -1) {
+        this.SearchHistory.splice(index, -1)
+      }
+      this.SearchHistory.unshift(val)
+
+      console.log(this.SearchHistory)
+
       this.isResult = true
     },
     onCancel () {
-      // this.$router.go(-1);
-      console.log(111)
+      this.isResult = false
+
+      this.$router.go(-1)
+    },
+    blur () {
       this.isResult = false
     }
+
   }
 }
 </script>
