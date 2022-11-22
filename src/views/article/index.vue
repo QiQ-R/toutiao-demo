@@ -22,25 +22,10 @@
           <van-image class="avatar" slot="icon" round fit="cover" :src="artList.aut_photo" />
           <div slot="title" class="user-name">{{ artList.aut_name }}</div>
           <div slot="label" class="publish-date">{{ artList.pubdate | relativeTime }}</div>
-          <van-button
-            v-if="!artList.is_followed"
-            class="follow-btn"
-            type="info"
-            color="#3296fa"
-            round
-            size="small"
-            icon="plus"
-            @click="onFollow"
-            :loading="loading"
-          >关注</van-button>
-          <van-button
-            v-else
-            class="follow-btn"
-            round
-            size="small"
-            @click="onFollow"
-            :loading="loading"
-          >已关注</van-button>
+          <followItem
+            :artList="artList"
+            @changeIsFollowed="artList.is_followed = !artList.is_followed"
+          ></followItem>
         </van-cell>
         <!-- /用户信息 -->
 
@@ -78,8 +63,8 @@
 <script>
 import { getArticlesById } from '@/api/Articles.js'
 import { ImagePreview } from 'vant' // 图片预览
-import { userFollow, userDelFollow } from '@/api/User'
 import './styles/github-markdown.css'
+import followItem from '@/components/follow-item/index.vue'
 
 export default {
   data () {
@@ -89,6 +74,9 @@ export default {
       errStatus: false,
       loading: false
     }
+  },
+  components: {
+    followItem
   },
   props: ['articleId'], // 通过路由传参的方式
   created () {
@@ -142,25 +130,6 @@ export default {
           )
         }
       })
-    },
-    async onFollow () {
-      try {
-        this.loading = true
-        if (this.artList.is_followed) {
-          await userDelFollow(this.artList.aut_id)
-        // 取消关注
-        } else {
-          // 添加关注
-          await userFollow(this.artList.aut_id)
-        }
-      } catch (err) {
-        console.log(err)
-        if (err.response && err.response.status === 401) {
-          this.$toast(err.response.data.message)
-        }
-      }
-      this.loading = false
-      this.artList.is_followed = !this.artList.is_followed
     }
 
   }
