@@ -23,18 +23,24 @@
           <div slot="title" class="user-name">{{ artList.aut_name }}</div>
           <div slot="label" class="publish-date">{{ artList.pubdate | relativeTime }}</div>
           <van-button
+            v-if="!artList.is_followed"
             class="follow-btn"
             type="info"
             color="#3296fa"
             round
             size="small"
             icon="plus"
+            @click="onFollow"
+            :loading="loading"
           >关注</van-button>
-          <!-- <van-button
+          <van-button
+            v-else
             class="follow-btn"
             round
             size="small"
-          >已关注</van-button>-->
+            @click="onFollow"
+            :loading="loading"
+          >已关注</van-button>
         </van-cell>
         <!-- /用户信息 -->
 
@@ -71,13 +77,17 @@
 
 <script>
 import { getArticlesById } from '@/api/Articles.js'
+import { ImagePreview } from 'vant' // 图片预览
+import { userFollow, userDelFollow } from '@/api/User'
 import './styles/github-markdown.css'
+
 export default {
   data () {
     return {
       isLoading: true,
       artList: {},
-      errStatus: false
+      errStatus: false,
+      loading: false
     }
   },
   props: ['articleId'], // 通过路由传参的方式
@@ -92,9 +102,20 @@ export default {
         //   throw new Error()
         // }
         const { data: { data } } = await getArticlesById(this.articleId)
-        console.log(data)
 
+        data.content = `
+        <h1>标题一</h1>
+        <img class="img-item" src="https://img01.yzcdn.cn/vant/apple-1.jpg"/> 
+        <h1>标题二</h1>
+        <img class="img-item" src="https://img01.yzcdn.cn/vant/apple-2.jpg"/>
+        <h1>标题三</h1>
+        <img class="img-item" src="https://img01.yzcdn.cn/vant/apple-3.jpg"/>
+        ${data.content} `
         this.artList = data
+
+        setTimeout(() => {
+          this.perImg()
+        })
       } catch (err) {
         if (err.response && err.response.status === 404) {
           this.errStatus = true
@@ -104,7 +125,44 @@ export default {
     },
     onClickLeft () {
       this.$router.go(-1)
+    },
+    perImg () {
+      const img = document.querySelectorAll('.img-item')
+      const images = []
+      img.forEach((item, startPosition) => {
+        images.push(item.src)
+        item.onclick = function () {
+          ImagePreview(
+            {
+              images,
+              startPosition,
+              closeable: true
+
+            }
+          )
+        }
+      })
+    },
+    async onFollow () {
+      try {
+        this.loading = true
+        if (this.artList.is_followed) {
+          await userDelFollow(this.artList.aut_id)
+        // 取消关注
+        } else {
+          // 添加关注
+          await userFollow(this.artList.aut_id)
+        }
+      } catch (err) {
+        console.log(err)
+        if (err.response && err.response.status === 401) {
+          this.$toast(err.response.data.message)
+        }
+      }
+      this.loading = false
+      this.artList.is_followed = !this.artList.is_followed
     }
+
   }
 }
 </script>
