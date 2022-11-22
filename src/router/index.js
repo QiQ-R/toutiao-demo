@@ -39,7 +39,15 @@ const routes = [
         component: () => import('@/views/my')
       }
     ]
+  },
+
+  {
+    path: '/article/:articleId',
+    component: () => import('@/views/article'),
+    props: true
+    // 使用路由传参解耦 来传递参数
   }
+
 ]
 
 const router = new VueRouter({

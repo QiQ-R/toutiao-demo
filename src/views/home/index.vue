@@ -1,17 +1,10 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="home-container">
     <!-- 导航条 -->
     <van-nav-bar title="标题">
       <template #title>
-        <van-button
-          class="search-btn"
-          type="info"
-          size="small"
-          round
-          icon="search"
-          to="search"
-          >搜索</van-button
-        >
+        <van-button class="search-btn" type="info" size="small" round icon="search" to="search">搜索</van-button>
       </template>
     </van-nav-bar>
 
@@ -34,67 +27,63 @@
       :style="{ height: '100%' }"
       close-icon-position="left"
     >
-      <channel-edit
-        :channels="channels"
-        :active="active"
-        @update-active="OnUpdateActive"
-      ></channel-edit>
+      <channel-edit :channels="channels" :active="active" @update-active="OnUpdateActive"></channel-edit>
       <!-- @update-active="OnUpdateActive"   接受子组件传值  -->
     </van-popup>
   </div>
 </template>
 
 <script>
-import channelEdit from "./components/channel-edit.vue";
-import { userChannelAPI } from "@/api/User.js";
-import channelList from "./components/channels-list.vue";
-import { mapState } from "vuex";
-import { getLocal } from "@/utils/storage.js";
+import channelEdit from './components/channel-edit.vue'
+import { userChannelAPI } from '@/api/User.js'
+import channelList from './components/channels-list.vue'
+import { mapState } from 'vuex'
+import { getLocal } from '@/utils/storage.js'
 export default {
-  data() {
+  data () {
     return {
       active: 0,
       channels: [],
-      EditShow: false,
-    };
+      EditShow: false
+    }
   },
   computed: {
-    ...mapState(["token"]),
+    ...mapState(['token'])
   },
-  created() {
-    this.userChannelFn();
+  created () {
+    this.userChannelFn()
   },
   methods: {
-    async userChannelFn() {
-      let channels = [];
+    async userChannelFn () {
+      let channels = []
       // 1、登录 或者没有本地存储
-      let local = getLocal("channels");
+      const local = getLocal('channels')
       if (this.token.token || !local.length) {
         const {
-          data: { data },
-        } = await userChannelAPI();
+          data: { data }
+        } = await userChannelAPI()
 
-        channels = data.channels;
+        channels = data.channels
       } else {
-        channels = local;
+        channels = local
       }
-      this.channels = channels;
+      this.channels = channels
     },
 
-    EditShowFn() {
-      this.EditShow = true;
+    EditShowFn () {
+      this.EditShow = true
     },
     // 编辑频道页面点击 我的频道 跳转
-    OnUpdateActive(index, isEditShow) {
-      this.active = index;
-      this.EditShow = isEditShow;
-    },
+    OnUpdateActive (index, isEditShow) {
+      this.active = index
+      this.EditShow = isEditShow
+    }
   },
   components: {
     channelList,
-    channelEdit,
-  },
-};
+    channelEdit
+  }
+}
 </script>
 
 <style scoped lang="less">

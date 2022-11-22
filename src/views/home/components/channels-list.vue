@@ -21,73 +21,73 @@
 </template>
 
 <script>
-import channelItem from "@/components/channels-item/index.vue";
-import { getArticles } from "@/api/Articles.js";
+import channelItem from './channels-item/index.vue'
+import { getArticles } from '@/api/Articles.js'
 export default {
-  name: "test-item",
-  props: ["channels"],
-  data() {
+  name: 'test-item',
+  props: ['channels'],
+  data () {
     return {
       list: [],
       loading: false,
       finished: false,
-      timestamp: "",
+      timestamp: '',
       error: false,
       refreshingLoading: false, // 下拉刷新的状态
-      successText: "刷新成功",
-    };
+      successText: '刷新成功'
+    }
   },
   components: {
-    channelItem,
+    channelItem
   },
 
   methods: {
-    async onLoad() {
+    async onLoad () {
       // 异步更新数据
       try {
         const {
           data: {
-            data: { results, pre_timestamp },
-          },
+            data: { results, pre_timestamp }
+          }
         } = await getArticles({
           channel_id: this.channels.id,
-          timestamp: this.timestamp || Date.now(),
-        });
-        this.list = [...this.list, ...results];
+          timestamp: this.timestamp || Date.now()
+        })
+        this.list = [...this.list, ...results]
 
-        this.loading = false;
+        this.loading = false
         if (results.length) {
-          this.timestamp = pre_timestamp;
+          this.timestamp = pre_timestamp
         } else {
-          this.finished = true;
+          this.finished = true
         }
       } catch (err) {
-        console.log("请求失败", err);
+        console.log('请求失败', err)
 
-        this.loading = false;
-        this.error = true;
+        this.loading = false
+        this.error = true
       }
     },
     // 下拉刷新
-    async onRefresh() {
+    async onRefresh () {
       try {
         const {
           data: {
-            data: { results },
-          },
+            data: { results }
+          }
         } = await getArticles({
           channel_id: this.channels.id,
-          timestamp: Date.now(),
-        });
-        this.list = [...this.list, ...results];
-        this.refreshingLoading = false;
-        this.successText = `刷新成功，请求了 ${results.length}条数据`;
+          timestamp: Date.now()
+        })
+        this.list = [...this.list, ...results]
+        this.refreshingLoading = false
+        this.successText = `刷新成功，请求了 ${results.length}条数据`
       } catch (err) {
-        this.successText = "刷新失败";
+        this.successText = '刷新失败'
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less">
