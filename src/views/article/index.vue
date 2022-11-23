@@ -34,12 +34,12 @@
         <van-divider>正文结束</van-divider>
 
         <!-- 文章的评论 -->
-        <article-pinlun></article-pinlun>
+        <article-pinlun :articleId="artList.art_id" @changetotalCount="totoCount = $event"></article-pinlun>
 
         <!-- 底部区域 -->
         <div class="article-bottom">
           <van-button class="comment-btn" type="default" round size="small">写评论</van-button>
-          <van-icon name="comment-o" info="123" color="#777" />
+          <van-icon name="comment-o" :info="totoCount" color="#777" />
           <collect-item v-model="artList.is_collected" :articleId="articleId" />
           <like-article v-model="artList.attitude" :articleId="articleId"></like-article>
 
@@ -71,7 +71,7 @@ import './styles/github-markdown.css'
 import followItem from '@/components/follow-item/index.vue'
 import collectItem from '@/components/collect-item/index.vue'
 import likeArticle from '@/components/like-article/index.vue'
-import articlePinlun from '@/components/article-pinlun'
+import articlePinlun from '@/components/article-comment/index.vue'
 
 export default {
   data () {
@@ -79,7 +79,8 @@ export default {
       isLoading: true,
       artList: {},
       errStatus: false,
-      loading: false
+      loading: false,
+      totoCount: 0
     }
   },
   components: {
