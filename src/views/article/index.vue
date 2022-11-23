@@ -24,7 +24,7 @@
           <div slot="label" class="publish-date">{{ artList.pubdate | relativeTime }}</div>
           <followItem
             :artList="artList"
-            @changeIsFollowed="artList.is_followed = !artList.is_followed"
+            :changeIsFollowed="artList.is_followed = artList.is_followed"
           ></followItem>
         </van-cell>
         <!-- /用户信息 -->
@@ -32,6 +32,20 @@
         <!-- 文章内容 -->
         <div class="article-content markdown-body" v-html="artList.content">这是文章内容</div>
         <van-divider>正文结束</van-divider>
+
+        <!-- 文章的评论 -->
+        <article-pinlun></article-pinlun>
+
+        <!-- 底部区域 -->
+        <div class="article-bottom">
+          <van-button class="comment-btn" type="default" round size="small">写评论</van-button>
+          <van-icon name="comment-o" info="123" color="#777" />
+          <collect-item v-model="artList.is_collected" :articleId="articleId" />
+          <like-article v-model="artList.attitude" :articleId="articleId"></like-article>
+
+          <van-icon name="share" color="#777777"></van-icon>
+        </div>
+        <!-- /底部区域 -->
       </div>
 
       <!-- 加载失败：404 -->
@@ -47,16 +61,6 @@
         <van-button class="retry-btn" @click="getArticlesByIdFn">点击重试</van-button>
       </div>
     </div>
-
-    <!-- 底部区域 -->
-    <div class="article-bottom">
-      <van-button class="comment-btn" type="default" round size="small">写评论</van-button>
-      <van-icon name="comment-o" info="123" color="#777" />
-      <van-icon color="#777" name="star-o" />
-      <van-icon color="#777" name="good-job-o" />
-      <van-icon name="share" color="#777777"></van-icon>
-    </div>
-    <!-- /底部区域 -->
   </div>
 </template>
 
@@ -65,6 +69,9 @@ import { getArticlesById } from '@/api/Articles.js'
 import { ImagePreview } from 'vant' // 图片预览
 import './styles/github-markdown.css'
 import followItem from '@/components/follow-item/index.vue'
+import collectItem from '@/components/collect-item/index.vue'
+import likeArticle from '@/components/like-article/index.vue'
+import articlePinlun from '@/components/article-pinlun'
 
 export default {
   data () {
@@ -76,7 +83,10 @@ export default {
     }
   },
   components: {
-    followItem
+    followItem,
+    collectItem,
+    likeArticle,
+    articlePinlun
   },
   props: ['articleId'], // 通过路由传参的方式
   created () {

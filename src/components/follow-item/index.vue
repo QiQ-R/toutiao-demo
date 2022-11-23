@@ -34,6 +34,11 @@ export default {
       loading: false
     }
   },
+  model: {
+    prop: 'artList',
+    event: 'changeIsFollowed'
+
+  },
   methods: {
     async onFollow () {
       try {
